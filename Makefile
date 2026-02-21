@@ -7,9 +7,9 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=xtables-addons
-PKG_VERSION:=3.26
-PKG_RELEASE:=1
-PKG_HASH:=0b52df2117bacf2e32d1d3f98d09dbf88b274390733d3955699b108acaf9f2a6
+PKG_VERSION:=3.27
+PKG_RELEASE:=3
+PKG_HASH:=e47ea8febe73c12ecab09d2c93578c5dc72d76f17fdf673397758f519cce6828
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=https://inai.de/files/xtables-addons/
@@ -19,6 +19,7 @@ PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
 
+PKG_FIXUP:=autoreconf
 PKG_ASLR_PIE:=0
 
 include $(INCLUDE_DIR)/package.mk
@@ -42,8 +43,7 @@ endef
 # 2: extension/module display name used in package title/description
 # 3: list of extensions to package
 # 4: list of modules to package
-# 5: module load priority
-# 6: module depends
+# 5: module depends
 define BuildTemplate
 
  ifneq ($(4),)
@@ -72,9 +72,9 @@ define KernelPackage/nf-nathelper-rtsp
 endef
 
 
-#$(eval $(call BuildTemplate,SUFFIX,DESCRIPTION,EXTENSION,MODULE,PRIORITY,DEPENDS))
+#$(eval $(call BuildTemplate,SUFFIX,DESCRIPTION,EXTENSION,MODULE,DEPENDS))
 
-$(eval $(call BuildTemplate,compat-xtables,API compatibilty layer,,compat_xtables,+IPV6:kmod-ip6tables))
+$(eval $(call BuildTemplate,compat-xtables,API compatibility layer,,compat_xtables,+IPV6:kmod-ip6tables))
 
 $(eval $(call BuildTemplate,account,ACCOUNT,xt_ACCOUNT,ACCOUNT/xt_ACCOUNT,+kmod-ipt-compat-xtables))
 $(eval $(call BuildTemplate,asn,asn,xt_asn,xt_asn,))

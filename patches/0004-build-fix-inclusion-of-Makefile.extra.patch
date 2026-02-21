@@ -1,0 +1,53 @@
+From f1bff17ac4747aa4c715884e03e6d7ab2baf3ab2 Mon Sep 17 00:00:00 2001
+From: Jeremy Sowden <jeremy@azazel.net>
+Date: Sun, 9 Mar 2025 17:41:27 +0100
+Subject: [PATCH 4/8] build: fix inclusion of Makefile.extra
+
+Commit 08a16d90ceae ("build: use `$(top_srcdir)` when including Makefile.extra")
+replaces hard-coded relative paths used to include Makefile.extra with
+variables.  However, despite the commit message, the variables are enclosed with
+braces, not parentheses, and it transpires that automake does not support the
+use of braces in this context.  As a result, Makefile.extra is not included, and
+the libxt_ACCOUNT.so and libxt_pknock.so extensions are not built.
+
+Use parentheses instead.
+
+Link: https://bugs.launchpad.net/ubuntu/+source/xtables-addons/+bug/2080528
+Fixes: 08a16d90ceae ("build: use `$(top_srcdir)` when including Makefile.extra")
+Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+---
+ extensions/ACCOUNT/Makefile.am | 2 +-
+ extensions/Makefile.am         | 2 +-
+ extensions/pknock/Makefile.am  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+--- a/extensions/ACCOUNT/Makefile.am
++++ b/extensions/ACCOUNT/Makefile.am
+@@ -3,7 +3,7 @@
+ AM_CPPFLAGS = ${regular_CPPFLAGS} -I${abs_top_srcdir}/extensions
+ AM_CFLAGS   = ${regular_CFLAGS} ${libxtables_CFLAGS}
+ 
+-include ${top_srcdir}/Makefile.extra
++include $(top_srcdir)/Makefile.extra
+ 
+ sbin_PROGRAMS = iptaccount
+ iptaccount_LDADD = libxt_ACCOUNT_cl.la
+--- a/extensions/Makefile.am
++++ b/extensions/Makefile.am
+@@ -26,4 +26,4 @@ install-exec-local: modules_install
+ 
+ clean-local: clean_modules
+ 
+-include ${top_srcdir}/Makefile.extra
++include $(top_srcdir)/Makefile.extra
+--- a/extensions/pknock/Makefile.am
++++ b/extensions/pknock/Makefile.am
+@@ -3,7 +3,7 @@
+ AM_CPPFLAGS = ${regular_CPPFLAGS} -I${abs_top_srcdir}/extensions
+ AM_CFLAGS   = ${regular_CFLAGS} ${libxtables_CFLAGS}
+ 
+-include ${top_srcdir}/Makefile.extra
++include $(top_srcdir)/Makefile.extra
+ 
+ sbin_PROGRAMS = pknlusr
+ dist_man_MANS = pknlusr.8

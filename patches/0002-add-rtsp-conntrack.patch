@@ -1,3 +1,36 @@
+From 6bb12d4da3362d1f916325c763598e4a46b1b4cd Mon Sep 17 00:00:00 2001
+From: sbwml <admin@cooluc.com>
+Date: Sat, 21 Feb 2026 23:18:27 +0800
+Subject: [PATCH 2/8] add rtsp conntrack
+
+Signed-off-by: sbwml <admin@cooluc.com>
+---
+ extensions/Kbuild                   |   1 +
+ extensions/rtsp/Kbuild              |   4 +
+ extensions/rtsp/netfilter_helpers.h | 144 ++++++
+ extensions/rtsp/netfilter_mime.h    |  89 ++++
+ extensions/rtsp/nf_conntrack_rtsp.c | 760 ++++++++++++++++++++++++++++
+ extensions/rtsp/nf_conntrack_rtsp.h |  74 +++
+ extensions/rtsp/nf_nat_rtsp.c       | 640 +++++++++++++++++++++++
+ mconfig                             |   1 +
+ 8 files changed, 1713 insertions(+)
+ create mode 100644 extensions/rtsp/Kbuild
+ create mode 100644 extensions/rtsp/netfilter_helpers.h
+ create mode 100644 extensions/rtsp/netfilter_mime.h
+ create mode 100644 extensions/rtsp/nf_conntrack_rtsp.c
+ create mode 100644 extensions/rtsp/nf_conntrack_rtsp.h
+ create mode 100644 extensions/rtsp/nf_nat_rtsp.c
+
+--- a/extensions/Kbuild
++++ b/extensions/Kbuild
+@@ -28,6 +28,7 @@ obj-${build_lscan}       += xt_lscan.o
+ obj-${build_pknock}      += pknock/
+ obj-${build_psd}         += xt_psd.o
+ obj-${build_quota2}      += xt_quota2.o
++obj-${build_rtsp}        += rtsp/
+ 
+ -include ${M}/*.Kbuild
+ -include ${M}/Kbuild.*
 --- /dev/null
 +++ b/extensions/rtsp/Kbuild
 @@ -0,0 +1,4 @@
@@ -246,7 +279,7 @@
 +#endif /* _NETFILTER_MIME_H */
 --- /dev/null
 +++ b/extensions/rtsp/nf_conntrack_rtsp.c
-@@ -0,0 +1,756 @@
+@@ -0,0 +1,760 @@
 +/*
 + * RTSP extension for IP connection tracking
 + * (C) 2003 by Tom Marshall <tmarshall at real.com>
@@ -984,7 +1017,11 @@
 +		}
 +
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 8, 0)
 +		strlcpy(hlpr->name, tmpname, sizeof(hlpr->name));
++#else
++		strscpy(hlpr->name, tmpname, sizeof(hlpr->name));
++#endif
 +#else
 +		hlpr->name = tmpname;
 +#endif
@@ -1723,16 +1760,6 @@
 +
 +module_init(init);
 +module_exit(fini);
---- a/extensions/Kbuild
-+++ b/extensions/Kbuild
-@@ -28,6 +28,7 @@ obj-${build_lscan}       += xt_lscan.o
- obj-${build_pknock}      += pknock/
- obj-${build_psd}         += xt_psd.o
- obj-${build_quota2}      += xt_quota2.o
-+obj-${build_rtsp}        += rtsp/
- 
- -include ${M}/*.Kbuild
- -include ${M}/Kbuild.*
 --- a/mconfig
 +++ b/mconfig
 @@ -24,3 +24,4 @@ build_lscan=m

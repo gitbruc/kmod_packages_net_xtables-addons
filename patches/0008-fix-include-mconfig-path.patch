@@ -1,0 +1,20 @@
+From 956698747e68de2881bf3fd31004deb941757032 Mon Sep 17 00:00:00 2001
+From: sbwml <admin@cooluc.com>
+Date: Sun, 22 Feb 2026 00:01:49 +0800
+Subject: [PATCH 8/8] fix include mconfig path
+
+Signed-off-by: sbwml <admin@cooluc.com>
+---
+ extensions/Kbuild | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/extensions/Kbuild
++++ b/extensions/Kbuild
+@@ -1,6 +1,6 @@
+ # -*- Makefile -*-
+ 
+-include ${XA_ABSTOPSRCDIR}/mconfig
++include ../mconfig
+ -include ${XA_ABSTOPSRCDIR}/mconfig.*
+ 
+ obj-m                    += compat_xtables.o

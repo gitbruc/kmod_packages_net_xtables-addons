@@ -1,0 +1,32 @@
+From ac5bf803808d988e666c34f6f4ff49adfb202b13 Mon Sep 17 00:00:00 2001
+From: Jeremy Sowden <jeremy@azazel.net>
+Date: Thu, 29 May 2025 22:48:02 +0200
+Subject: [PATCH 5/8] build: replace obsolete `EXTRA_CFLAGS`
+
+`EXTRA_CFLAGS` was superseded by `ccflags-y`, introduced in 2007, and it has
+been removed in v6.15.  Replace it.
+
+Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
+---
+ extensions/ACCOUNT/Kbuild | 2 +-
+ extensions/pknock/Kbuild  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- a/extensions/ACCOUNT/Kbuild
++++ b/extensions/ACCOUNT/Kbuild
+@@ -1,5 +1,5 @@
+ # -*- Makefile -*-
+ 
+-EXTRA_CFLAGS = -I${src}/..
++ccflags-y += -I${src}/..
+ 
+ obj-m += xt_ACCOUNT.o
+--- a/extensions/pknock/Kbuild
++++ b/extensions/pknock/Kbuild
+@@ -1,5 +1,5 @@
+ # -*- Makefile -*-
+ 
+-EXTRA_CFLAGS = -I${src}/..
++ccflags-y += -I${src}/..
+ 
+ obj-m += xt_pknock.o

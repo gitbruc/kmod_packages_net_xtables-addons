@@ -1,3 +1,161 @@
+From 03075a67594edc095eb7006ebe34eff846af12a5 Mon Sep 17 00:00:00 2001
+From: sbwml <admin@cooluc.com>
+Date: Sat, 21 Feb 2026 23:22:30 +0800
+Subject: [PATCH 3/8] add lua packetscript
+
+Signed-off-by: sbwml <admin@cooluc.com>
+---
+ extensions/Kbuild                   |    1 +
+ extensions/LUA/Kbuild               |   51 +
+ extensions/LUA/Makefile.am          |    1 +
+ extensions/LUA/Mbuild               |    3 +
+ extensions/LUA/byte_array.c         |  161 ++++
+ extensions/LUA/controller.c         |  604 ++++++++++++
+ extensions/LUA/controller.h         |  264 ++++++
+ extensions/LUA/libxt_LUA.c          |  191 ++++
+ extensions/LUA/libxt_LUA.man        |    1 +
+ extensions/LUA/lua/include/ctype.h  |   11 +
+ extensions/LUA/lua/include/errno.h  |    1 +
+ extensions/LUA/lua/include/locale.h |    5 +
+ extensions/LUA/lua/include/setjmp.h |   26 +
+ extensions/LUA/lua/include/stdio.h  |    1 +
+ extensions/LUA/lua/include/stdlib.h |    7 +
+ extensions/LUA/lua/include/string.h |    1 +
+ extensions/LUA/lua/lapi.c           | 1083 ++++++++++++++++++++++
+ extensions/LUA/lua/lapi.h           |   16 +
+ extensions/LUA/lua/lauxlib.c        |  672 ++++++++++++++
+ extensions/LUA/lua/lauxlib.h        |  184 ++++
+ extensions/LUA/lua/lbaselib.c       |  647 +++++++++++++
+ extensions/LUA/lua/lcode.c          |  838 +++++++++++++++++
+ extensions/LUA/lua/lcode.h          |   76 ++
+ extensions/LUA/lua/ldebug.c         |  636 +++++++++++++
+ extensions/LUA/lua/ldebug.h         |   33 +
+ extensions/LUA/lua/ldo.c            |  519 +++++++++++
+ extensions/LUA/lua/ldo.h            |   57 ++
+ extensions/LUA/lua/ldump.c          |  164 ++++
+ extensions/LUA/lua/lfunc.c          |  174 ++++
+ extensions/LUA/lua/lfunc.h          |   34 +
+ extensions/LUA/lua/lgc.c            |  711 ++++++++++++++
+ extensions/LUA/lua/lgc.h            |  110 +++
+ extensions/LUA/lua/llex.c           |  460 +++++++++
+ extensions/LUA/lua/llex.h           |   83 ++
+ extensions/LUA/lua/llimits.h        |  124 +++
+ extensions/LUA/lua/lmem.c           |   86 ++
+ extensions/LUA/lua/lmem.h           |   49 +
+ extensions/LUA/lua/lobject.c        |  213 +++++
+ extensions/LUA/lua/lobject.h        |  381 ++++++++
+ extensions/LUA/lua/lopcodes.c       |  102 ++
+ extensions/LUA/lua/lopcodes.h       |  268 ++++++
+ extensions/LUA/lua/lparser.c        | 1339 +++++++++++++++++++++++++++
+ extensions/LUA/lua/lparser.h        |   82 ++
+ extensions/LUA/lua/lstate.c         |  214 +++++
+ extensions/LUA/lua/lstate.h         |  169 ++++
+ extensions/LUA/lua/lstring.c        |  110 +++
+ extensions/LUA/lua/lstring.h        |   31 +
+ extensions/LUA/lua/lstrlib.c        |  883 ++++++++++++++++++
+ extensions/LUA/lua/ltable.c         |  587 ++++++++++++
+ extensions/LUA/lua/ltable.h         |   40 +
+ extensions/LUA/lua/ltablib.c        |  288 ++++++
+ extensions/LUA/lua/ltm.c            |   74 ++
+ extensions/LUA/lua/ltm.h            |   54 ++
+ extensions/LUA/lua/lua.h            |  386 ++++++++
+ extensions/LUA/lua/luaconf.h        |  803 ++++++++++++++++
+ extensions/LUA/lua/lualib.h         |   55 ++
+ extensions/LUA/lua/lundump.c        |  227 +++++
+ extensions/LUA/lua/lundump.h        |   36 +
+ extensions/LUA/lua/lvm.c            |  762 +++++++++++++++
+ extensions/LUA/lua/lvm.h            |   36 +
+ extensions/LUA/lua/lzio.c           |   81 ++
+ extensions/LUA/lua/lzio.h           |   67 ++
+ extensions/LUA/nf_lua.c             |   64 ++
+ extensions/LUA/prot_buf_dynamic.c   |  486 ++++++++++
+ extensions/LUA/prot_buf_ethernet.c  |   60 ++
+ extensions/LUA/prot_buf_helpers.c   |  216 +++++
+ extensions/LUA/prot_buf_icmp.c      |   49 +
+ extensions/LUA/prot_buf_ip.c        |  215 +++++
+ extensions/LUA/prot_buf_raw.c       |   43 +
+ extensions/LUA/prot_buf_tcp.c       |  194 ++++
+ extensions/LUA/prot_buf_tftp.c      |   87 ++
+ extensions/LUA/prot_buf_udp.c       |   59 ++
+ extensions/LUA/xt_LUA.h             |   36 +
+ extensions/LUA/xt_LUA_target.c      |  286 ++++++
+ extensions/Mbuild                   |    1 +
+ mconfig                             |    1 +
+ 76 files changed, 17170 insertions(+)
+ create mode 100644 extensions/LUA/Kbuild
+ create mode 100644 extensions/LUA/Makefile.am
+ create mode 100644 extensions/LUA/Mbuild
+ create mode 100644 extensions/LUA/byte_array.c
+ create mode 100644 extensions/LUA/controller.c
+ create mode 100644 extensions/LUA/controller.h
+ create mode 100644 extensions/LUA/libxt_LUA.c
+ create mode 100644 extensions/LUA/libxt_LUA.man
+ create mode 100644 extensions/LUA/lua/include/ctype.h
+ create mode 100644 extensions/LUA/lua/include/errno.h
+ create mode 100644 extensions/LUA/lua/include/locale.h
+ create mode 100644 extensions/LUA/lua/include/setjmp.h
+ create mode 100644 extensions/LUA/lua/include/stdio.h
+ create mode 100644 extensions/LUA/lua/include/stdlib.h
+ create mode 100644 extensions/LUA/lua/include/string.h
+ create mode 100644 extensions/LUA/lua/lapi.c
+ create mode 100644 extensions/LUA/lua/lapi.h
+ create mode 100644 extensions/LUA/lua/lauxlib.c
+ create mode 100644 extensions/LUA/lua/lauxlib.h
+ create mode 100644 extensions/LUA/lua/lbaselib.c
+ create mode 100644 extensions/LUA/lua/lcode.c
+ create mode 100644 extensions/LUA/lua/lcode.h
+ create mode 100644 extensions/LUA/lua/ldebug.c
+ create mode 100644 extensions/LUA/lua/ldebug.h
+ create mode 100644 extensions/LUA/lua/ldo.c
+ create mode 100644 extensions/LUA/lua/ldo.h
+ create mode 100644 extensions/LUA/lua/ldump.c
+ create mode 100644 extensions/LUA/lua/lfunc.c
+ create mode 100644 extensions/LUA/lua/lfunc.h
+ create mode 100644 extensions/LUA/lua/lgc.c
+ create mode 100644 extensions/LUA/lua/lgc.h
+ create mode 100644 extensions/LUA/lua/llex.c
+ create mode 100644 extensions/LUA/lua/llex.h
+ create mode 100644 extensions/LUA/lua/llimits.h
+ create mode 100644 extensions/LUA/lua/lmem.c
+ create mode 100644 extensions/LUA/lua/lmem.h
+ create mode 100644 extensions/LUA/lua/lobject.c
+ create mode 100644 extensions/LUA/lua/lobject.h
+ create mode 100644 extensions/LUA/lua/lopcodes.c
+ create mode 100644 extensions/LUA/lua/lopcodes.h
+ create mode 100644 extensions/LUA/lua/lparser.c
+ create mode 100644 extensions/LUA/lua/lparser.h
+ create mode 100644 extensions/LUA/lua/lstate.c
+ create mode 100644 extensions/LUA/lua/lstate.h
+ create mode 100644 extensions/LUA/lua/lstring.c
+ create mode 100644 extensions/LUA/lua/lstring.h
+ create mode 100644 extensions/LUA/lua/lstrlib.c
+ create mode 100644 extensions/LUA/lua/ltable.c
+ create mode 100644 extensions/LUA/lua/ltable.h
+ create mode 100644 extensions/LUA/lua/ltablib.c
+ create mode 100644 extensions/LUA/lua/ltm.c
+ create mode 100644 extensions/LUA/lua/ltm.h
+ create mode 100644 extensions/LUA/lua/lua.h
+ create mode 100644 extensions/LUA/lua/luaconf.h
+ create mode 100644 extensions/LUA/lua/lualib.h
+ create mode 100644 extensions/LUA/lua/lundump.c
+ create mode 100644 extensions/LUA/lua/lundump.h
+ create mode 100644 extensions/LUA/lua/lvm.c
+ create mode 100644 extensions/LUA/lua/lvm.h
+ create mode 100644 extensions/LUA/lua/lzio.c
+ create mode 100644 extensions/LUA/lua/lzio.h
+ create mode 100644 extensions/LUA/nf_lua.c
+ create mode 100644 extensions/LUA/prot_buf_dynamic.c
+ create mode 100644 extensions/LUA/prot_buf_ethernet.c
+ create mode 100644 extensions/LUA/prot_buf_helpers.c
+ create mode 100644 extensions/LUA/prot_buf_icmp.c
+ create mode 100644 extensions/LUA/prot_buf_ip.c
+ create mode 100644 extensions/LUA/prot_buf_raw.c
+ create mode 100644 extensions/LUA/prot_buf_tcp.c
+ create mode 100644 extensions/LUA/prot_buf_tftp.c
+ create mode 100644 extensions/LUA/prot_buf_udp.c
+ create mode 100644 extensions/LUA/xt_LUA.h
+ create mode 100644 extensions/LUA/xt_LUA_target.c
+
 --- a/extensions/Kbuild
 +++ b/extensions/Kbuild
 @@ -29,6 +29,7 @@ obj-${build_pknock}      += pknock/
@@ -10,15 +168,15 @@
  -include ${M}/Kbuild.*
 --- /dev/null
 +++ b/extensions/LUA/Kbuild
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,51 @@
 +# -*- Makefile -*-
 +
 +# Adding debug options
-+EXTRA_CFLAGS += -DDEBUG
++ccflags-y += -DDEBUG
 +
 +obj-m += xt_LUA.o
 +
-+EXTRA_CFLAGS += -I$(src)/prot_buf_new
++ccflags-y += -I$(src)/prot_buf_new
 +xt_LUA-y += xt_LUA_target.o \
 +
 +xt_LUA-y += nf_lua.o \
@@ -35,8 +193,10 @@
 +			prot_buf_dynamic.o \
 +
 +
++# Enable <stddef.h> <stdarg.h>
++ccflags-y += -isystem $(shell $(CC) -print-file-name=include)
 +# Adding Lua Support
-+EXTRA_CFLAGS += -I$(src)/lua -I$(src)/lua/include 
++ccflags-y += -I$(src)/lua -I$(src)/lua/include 
 +xt_LUA-y += lua/lapi.o \
 +			lua/lbaselib.o \
 +			lua/lcode.o \
@@ -1381,16 +1541,13 @@
 +#include <linux/string.h>
 --- /dev/null
 +++ b/extensions/LUA/lua/lapi.c
-@@ -0,0 +1,1086 @@
+@@ -0,0 +1,1083 @@
 +/*
 +** $Id: lapi.c,v 2.55.1.5 2008/07/04 18:41:18 roberto Exp $
 +** Lua API
 +** See Copyright Notice in lua.h
 +*/
 +
-+#include <stdarg.h>
-+#include <math.h>
-+#include <assert.h>
 +#include <string.h>
 +
 +#define lapi_c
@@ -7849,7 +8006,7 @@
 +}
 --- /dev/null
 +++ b/extensions/LUA/lua/llex.h
-@@ -0,0 +1,81 @@
+@@ -0,0 +1,83 @@
 +/*
 +** $Id: llex.h,v 1.58.1.1 2007/12/27 13:02:25 roberto Exp $
 +** Lexical Analyzer
@@ -7862,6 +8019,8 @@
 +#include "lobject.h"
 +#include "lzio.h"
 +
++/* prevent conflict with definition from asm/current.h */
++#undef current
 +
 +#define FIRST_RESERVED	257
 +
@@ -7933,7 +8092,7 @@
 +#endif
 --- /dev/null
 +++ b/extensions/LUA/lua/llimits.h
-@@ -0,0 +1,125 @@
+@@ -0,0 +1,124 @@
 +/*
 +** $Id: llimits.h,v 1.69.1.1 2007/12/27 13:02:25 roberto Exp $
 +** Limits, basic types, and some other `installation-dependent' definitions
@@ -7944,7 +8103,6 @@
 +#define llimits_h
 +
 +#include <stddef.h>
-+#include <limits.h>
 +
 +#include "lua.h"
 +
@@ -12027,7 +12185,7 @@
 +}
 --- /dev/null
 +++ b/extensions/LUA/lua/ltable.c
-@@ -0,0 +1,588 @@
+@@ -0,0 +1,587 @@
 +/*
 +** $Id: ltable.c,v 2.32.1.2 2007/12/28 15:32:23 roberto Exp $
 +** Lua tables (hash)
@@ -12048,7 +12206,6 @@
 +** Hence even when the load factor reaches 100%, performance remains good.
 +*/
 +
-+#include <math.h>
 +#include <string.h>
 +
 +#define ltable_c
@@ -13475,7 +13632,7 @@
 +#endif
 --- /dev/null
 +++ b/extensions/LUA/lua/luaconf.h
-@@ -0,0 +1,797 @@
+@@ -0,0 +1,803 @@
 +/*
 +** $Id: luaconf.h,v 1.82.1.7 2008/02/11 16:25:08 roberto Exp $
 +** Configuration file for Lua
@@ -13491,8 +13648,12 @@
 +#if !defined(__KERNEL__)
 +#include <limits.h>
 +#else
++#include <linux/kernel.h>
++
++#undef UCHAR_MAX
++#undef BUFSIZ
++#undef NO_FPU
 +#define UCHAR_MAX	255
-+#define SHRT_MAX        32767
 +#define BUFSIZ 		8192
 +#define NO_FPU
 +#endif
@@ -14115,6 +14276,8 @@
 +*/
 +#if defined(__KERNEL__)
 +#undef LUA_USE_ULONGJMP
++#define setjmp __builtin_setjmp
++#define longjmp __builtin_longjmp
 +#endif
 +
 +#if defined(__cplusplus)
@@ -16451,7 +16614,7 @@
 +
 --- /dev/null
 +++ b/extensions/LUA/prot_buf_ip.c
-@@ -0,0 +1,209 @@
+@@ -0,0 +1,215 @@
 +/*
 + *	Copyright (C) 2010 University of Basel <http://cn.cs.unibas.ch/>
 + *	by Andre Graf <andre@dergraf.org>
@@ -16470,8 +16633,14 @@
 + *	along with this program; if not, see <http://www.gnu.org/licenses/>.
 + */
 +
++#include <linux/version.h>
++
 +#if defined(__KERNEL__)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
++	#include <linux/bitops.h>
++#else
 +	#include <net/checksum.h>
++#endif
 +	#include <net/tcp.h>
 +#endif
 +
@@ -16709,7 +16878,7 @@
 +}
 --- /dev/null
 +++ b/extensions/LUA/prot_buf_tcp.c
-@@ -0,0 +1,188 @@
+@@ -0,0 +1,194 @@
 +/*
 + *	Copyright (C) 2010 University of Basel <http://cn.cs.unibas.ch/>
 + *	by Andre Graf <andre@dergraf.org>
@@ -16728,8 +16897,14 @@
 + *	along with this program; if not, see <http://www.gnu.org/licenses/>.
 + */
 +
++#include <linux/version.h>
++
 +#if defined(__KERNEL__)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
++	#include <linux/bitops.h>
++#else
 +	#include <net/checksum.h>
++#endif
 +	#include <net/tcp.h>
 +#endif
 +#include "controller.h"
@@ -16990,7 +17165,7 @@
 +}
 --- /dev/null
 +++ b/extensions/LUA/prot_buf_udp.c
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,59 @@
 +/*
 + *	Copyright (C) 2010 University of Basel <http://cn.cs.unibas.ch/>
 + *	by Andre Graf <andre@dergraf.org>
@@ -17009,8 +17184,14 @@
 + *	along with this program; if not, see <http://www.gnu.org/licenses/>.
 + */
 +
++#include <linux/version.h>
++
 +#if defined(__KERNEL__)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
++	#include <linux/bitops.h>
++#else
 +	#include <net/checksum.h>
++#endif
 +#endif
 +
 +#include "controller.h"
@@ -17107,7 +17288,7 @@
 +#include <linux/kernel.h>
 +#include <linux/slab.h>
 +#include <linux/module.h>
-+#include <asm/uaccess.h>
++#include <linux/uaccess.h>
 +#include <net/ip.h>
 +#include <linux/netfilter/x_tables.h>
 +#include "xt_LUA.h"
@@ -17152,10 +17333,10 @@
 + * XT_CONTINUE inside the *register_lua_packet_lib* function.
 + */
 +
-+spinlock_t lock = SPIN_LOCK_UNLOCKED;
++DEFINE_SPINLOCK(lock);
 +
 +static uint32_t 
-+lua_tg(struct sk_buff *pskb, const struct xt_target_param *par)
++lua_tg(struct sk_buff *pskb, const struct xt_action_param *par)
 +{
 +	uint32_t  verdict;
 +	lua_packet_segment *p;
@@ -17167,7 +17348,7 @@
 +
 +	L = lua_envs[info->state_id]->L;
 +
-+	if (!skb_make_writable(pskb, pskb->len))
++	if (skb_ensure_writable(pskb, pskb->len))
 +		return NF_DROP;
 +
 +	/* call the function provided by --function parameter or the default 'process_packet' defined in Lua */
@@ -17176,11 +17357,11 @@
 +	/* push the lua_packet_segment as a parameter */
 +	p = (lua_packet_segment *)lua_newuserdata(L, sizeof(lua_packet_segment));
 +	if (pskb->mac_header)
-+		p->start = pskb->mac_header;
++		p->start = skb_mac_header(pskb);
 +	else if (pskb->network_header)
-+		p->start = pskb->network_header;
++		p->start = skb_network_header(pskb);
 +	else if (pskb->transport_header)
-+		p->start = pskb->transport_header;
++		p->start = skb_transport_header(pskb);
 +	p->offset = 0;
 +	p->length = (unsigned long)pskb->tail - (unsigned long)p->start;
 +	p->changes = NULL;
@@ -17296,16 +17477,16 @@
 + * some workqueue initialization. So far this is done each time this function
 + * is called, subject to change.
 + */
-+static bool
++static int
 +lua_tg_checkentry(const struct xt_tgchk_param *par)
 +{
 +	const struct xt_lua_tginfo *info = par->targinfo;
 +
 +	if (load_script_into_state(info->state_id, info->script_size, (char *)info->buf)) {
 +		lua_state_refs[info->state_id]++;
-+		return true;
++		return 0;
 +	}
-+	return false;
++	return -EINVAL;
 +}
 +
 +/*::*

@@ -1,0 +1,25 @@
+From 713431c39ed0d07ba90d23d077d681a81ed2e574 Mon Sep 17 00:00:00 2001
+From: Jan Engelhardt <jengelh@inai.de>
+Date: Wed, 20 Aug 2025 10:30:49 +0200
+Subject: [PATCH 7/8] xt_pknock: support Linux 6.16 timer API
+
+pknock/xt_pknock.c:362:39: error: implicit declaration of function
+"from_timer"; did you mean "mod_timer"? [-Wimplicit-function-declaration]
+---
+ extensions/pknock/xt_pknock.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/extensions/pknock/xt_pknock.c
++++ b/extensions/pknock/xt_pknock.c
+@@ -359,7 +359,11 @@ has_logged_during_this_minute(const stru
+ static void peer_gc(struct timer_list *tl)
+ {
+ 	unsigned int i;
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0)
++	struct xt_pknock_rule *rule = timer_container_of(rule, tl, timer);
++#else
+ 	struct xt_pknock_rule *rule = from_timer(rule, tl, timer);
++#endif
+ 	struct peer *peer;
+ 	struct list_head *pos, *n;
+ 

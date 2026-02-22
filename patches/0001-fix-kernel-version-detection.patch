@@ -1,3 +1,13 @@
+From 356a66fc66aae10b279dbcdb850b70ac2d2a6c7c Mon Sep 17 00:00:00 2001
+From: sbwml <admin@cooluc.com>
+Date: Sat, 21 Feb 2026 23:13:57 +0800
+Subject: [PATCH 1/8] fix kernel version detection
+
+Signed-off-by: sbwml <admin@cooluc.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 --- a/configure.ac
 +++ b/configure.ac
 @@ -41,7 +41,7 @@ regular_CFLAGS="-Wall -Waggregate-return
